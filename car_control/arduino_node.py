@@ -4,17 +4,17 @@ from rclpy.node import Node
 import time
 import serial
 from example_interfaces.msg import String
+import json
 
 class ArduinoNode(Node):
     def __init__(self):
         super().__init__("arduino_node")
 
+        self.data = {"direction":'p',"speed":120}
+
         self.ser = serial.Serial(
-            port='/dev/ttyUSB1',
-            baudrate=9600,
-            parity=serial.PARITY_ODD,
-            stopbits=serial.STOPBITS_TWO,
-            bytesize=serial.SEVENBITS
+            port="/dev/ttyUSB0",
+            baudrate=9600
         )
         self.ser.isOpen()
 
@@ -24,9 +24,9 @@ class ArduinoNode(Node):
 
         self.get_logger().info("Arduino Serial Node has been started!")
         
-    def callback_direction_commands(self, command):
-        self.get_logger().info(command + " command sent")
-        self.ser.write(command)
+    def callback_direction_commands(self, command:String):
+        self.get_logger().info(command.data + " command sent")
+        self.ser.write(command.data.encode('ascii'))
 
 
 def main(args=None):

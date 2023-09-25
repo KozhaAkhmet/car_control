@@ -14,6 +14,7 @@ class ArduinoNode(Node):
         self.port = "/dev/ttyUSB0"
         self.try_connect_to_port(self.port)
         #TODO create service to reattach the port if failed
+        #TODO change to asynchronous communication
         
         self.subscriber_ = self.create_subscription(
             SerialData, "direction_commands", self.callback_send_data, 10)
